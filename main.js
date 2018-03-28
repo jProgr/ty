@@ -1,5 +1,6 @@
 var twitter = require('twitter');
-var credentials = require('./auth.js');
+const credentials = require('./auth.js');
+const accounts = require('./accounts.js');
 
 function presentTweet(error, tweet, response)
 {
@@ -7,8 +8,21 @@ function presentTweet(error, tweet, response)
   console.log(tweet[0].text);
 }
 
+function pickUsername(accounts)
+{
+  return accounts[getRandomInt(accounts.length)]
+}
+
+function getRandomInt(max)
+{
+  return Math.floor(Math.random() * Math.floor(max));
+}
+
 const twitterClient = new twitter(credentials);
 
-twitterClient.get('statuses/user_timeline',
-                  {user_id: 'MagicRealismBot', count: 1},
-                  presentTweet);
+const twitterParams = {
+  screen_name: pickUsername(accounts.userNames),
+  count: 1
+};
+
+twitterClient.get('statuses/user_timeline', twitterParams, presentTweet);
