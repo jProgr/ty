@@ -5,7 +5,7 @@ const accounts = require('./accounts.js');
 function presentTweet(error, tweet, response)
 {
   if(error) throw error;
-  console.log(tweet[0].text);
+  console.log(cleanTweet(tweet[0].text));
 }
 
 function pickUsername(accounts)
@@ -16,6 +16,15 @@ function pickUsername(accounts)
 function getRandomInt(max)
 {
   return Math.floor(Math.random() * Math.floor(max));
+}
+
+function cleanTweet(tweet)
+{
+  const replyTester = RegExp('@');
+  const replyCleaner = RegExp('@.+:(.*)');
+
+  if(!replyTester.test(tweet)) return tweet;
+  return replyCleaner.exec(tweet)[1].trim();
 }
 
 const twitterClient = new twitter(credentials);
